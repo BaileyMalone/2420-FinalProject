@@ -1,9 +1,11 @@
 package comprehensive;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 /**
  * Generates pseudo-random phrases $
@@ -18,6 +20,10 @@ import java.util.regex.Pattern;
 public class RandomPhraseGenerator 
 {
 	/**
+	 * <VERSION 2.0>
+	 * File reading speed optimized.
+	 * 
+	 * 
 	 * args[0] ~ The path and name of the input grammar file
 	 * args[1] ~ # of random phrases to generate
 	 * 
@@ -32,8 +38,7 @@ public class RandomPhraseGenerator
 	public static void main(String[] args) 
 	{
 		// Build the Grammar File
-		File file = new File(args[0]);
-		GrammarFile grammarFile = new GrammarFile(file);
+		GrammarFile grammarFile = new GrammarFile(args[0]);
 
 		// Generate the random phrases!
 		ArrayList<String> phrases = new ArrayList<String>();
@@ -46,17 +51,17 @@ public class RandomPhraseGenerator
 
 			/* Start building the phrase */
 			// Choose a random <start> production rule 
-				// Tokenize the sentence-format on whitespace
-				// Parse each token, replacing when needed, until we have all terminals
+			// Tokenize the sentence-format on whitespace
+			// Parse each token, replacing when needed, until we have all terminals
 			String punc = "";
 			String[] sentence = (grammarFile.getRandomProductionRule()).split("\\s");
-			
+
 			int sentencePieceIndex = 0;
 			for (String s : sentence)
 			{
 				if (sentencePieceIndex == (sentence.length-1))
 					punc = grabPuncutation(s);
-				
+
 				// If the last character is not something useful...
 				if (s.charAt(s.length()-1) == '.' || s.charAt(s.length()-1) == '!' || s.charAt(s.length()-1) == '?')
 					s.substring(0, s.length()-2);
@@ -97,9 +102,9 @@ public class RandomPhraseGenerator
 				sentencePieceIndex++;
 			}
 			// Add ending punctuation back on the phrase
-			//phrase = phrase.substring(0, phrase.length()-1);
-			phrase += punc;
-			
+			if (!phrase.contains("."))
+				phrase += punc;
+
 			// Add phrase to list-of-phrases
 			phrases.add(i, phrase);
 		}
@@ -121,7 +126,7 @@ public class RandomPhraseGenerator
 			end = split[split.length-1].substring(1);
 		else if (split.length >= 1)
 			end = split[split.length-1];
-		
+
 		return end;
 	}
 }
